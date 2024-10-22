@@ -1,5 +1,5 @@
-import { type BinaryLike, createHash } from "crypto";
 import bigInt from "big-integer";
+import jsSHA from "jssha";
 import { adjectives, nouns } from "./particles";
 
 interface ParticleMetadata {
@@ -16,7 +16,23 @@ interface Options {
 	maxItemChars?: number;
 	particles?: string[];
 	adjectiveCount?: number;
-	hashAlgorithm?: string;
+	hashAlgorithm?:
+		| "SHA-1"
+		| "SHA-224"
+		| "SHA-256"
+		| "SHA-384"
+		| "SHA-512"
+		| "SHA3-224"
+		| "SHA3-256"
+		| "SHA3-256"
+		| "SHA3-384"
+		| "SHA3-512"
+		| "SHAKE128"
+		| "SHAKE256"
+		| "CSHAKE128"
+		| "CSHAKE256"
+		| "KMAC128"
+		| "KMAC256";
 	separator?: string;
 	capitalize?: boolean;
 	_isParsed?: boolean;
@@ -107,7 +123,7 @@ export function parseOptions(options: Options | string | number): Options {
 	response.hashAlgorithm =
 		options && typeof options.hashAlgorithm === "string"
 			? options.hashAlgorithm
-			: "md5";
+			: "SHA-1";
 	response.separator =
 		options && typeof options.separator === "string" ? options.separator : "-";
 
@@ -153,9 +169,13 @@ export function getHash(options: Options) {
 	if (!useOptions.hashAlgorithm) {
 		throw new Error("Missing hash algorithm");
 	}
-	const hash = createHash(useOptions.hashAlgorithm);
-	hash.update(useOptions.seed as BinaryLike);
-	const hashDigest = hash.digest("hex");
+	const hash = new jsSHA(
+		// @ts-expect-error – The jsSHA library has incorrect types for the variant
+		options.hashAlgorithm ? options.hashAlgorithm : "SHA-1",
+		"TEXT",
+	);
+	hash.update(useOptions.seed ? useOptions.seed.toString() : "");
+	const hashDigest = hash.getHash("HEX");
 	return bigInt(hashDigest, 16).multiply("36413321723440003717");
 }
 

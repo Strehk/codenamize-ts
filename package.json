@@ -1,6 +1,6 @@
 {
 	"name": "codenamize-ts",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "Generate consistent easier-to-remember codenames from strings, numbers, or other seed inputs.",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
@@ -35,7 +35,8 @@
 	"license": "MIT",
 	"private": false,
 	"dependencies": {
-		"big-integer": "^1.6.36"
+		"big-integer": "^1.6.36",
+		"jssha": "^3.3.1"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
