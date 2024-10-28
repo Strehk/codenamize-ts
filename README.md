@@ -10,7 +10,7 @@ This is a Typescript port of the JavaScript adaption [codenamize-js](https://git
 
 ## Installation
 
-Install from the [npm repository](https://www.npmjs.com/package/tadesf/codenamize-ts).
+Install from the [npm repository](https://www.npmjs.com/package/codenamize-ts).
 
 ```bash
 npm install codenamize-ts
